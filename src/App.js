@@ -1,24 +1,37 @@
-import logo from './logo.svg';
+import React,{Fragment,useState} from 'react'
 import './App.css';
-
+import MovieList from './MovieList';
 function App() {
+  const [movies,setFetchMovie]=useState([])
+  const [isLoading,setIsLoading]=useState(false)
+  async function  fetchMovieHandler(){
+    setIsLoading(true)
+   const response= await fetch('https://swapi.dev/api/films/')
+   const data=await response.json();
+   const transformedMovies=data.results.map((movie)=>{
+    return {
+      id:movie.episode_id,
+      title:movie.title,
+      openingText:movie.opening_crawl,
+      releaseDate:movie.release_date
+    }
+   })
+   setFetchMovie(transformedMovies)
+   setIsLoading(false)
+  }
+  console.log(movies)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <section className='button'>
+       <button onClick={fetchMovieHandler}>FetchMovie</button>
+      </section>
+      {!isLoading && movies.length>0 && <section>
+       <MovieList movies={movies}/>
+      </section>}
+      {!isLoading && movies.length===0 && <h2 className='no-movie'>No Movies Found</h2>}
+      {isLoading && <h1>Loading......</h1>}
+      
+    </Fragment>
   );
 }
 
