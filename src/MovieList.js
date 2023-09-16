@@ -1,7 +1,7 @@
 import React,{Fragment} from 'react'
 import Card from './Card';
 const MovieList=(props)=>{
-    console.log(props.movies)
+   
     return(
       <Fragment>
         {props.movies.map(movie=>  <Card key={movie.id}>
